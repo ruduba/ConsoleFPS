@@ -2,7 +2,7 @@
 
 First commit:
 
-I would like to preface this README by saying that this project drove the CRAZY to the point that i was gonna cry and pull out my hair.
+I would like to preface this README by saying that this project drove me CRAZY to the point that i was gonna cry and pull out my hair.
 
 ALL BECAUSE:
 
@@ -37,3 +37,4 @@ i will attach a screenrecording of what we have so far below:
 https://github.com/user-attachments/assets/a6dc1f5b-4a49-4b6e-9f88-7ca7a41b55f5
 
 _i'm spinning like a ballerinaaaaa_
+
