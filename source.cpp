@@ -87,7 +87,7 @@ while(1){
         }
     }
 
-        if(GetAsyncKeyState((unsigned short)'D')& 0x8000){ // move forward
+        if(GetAsyncKeyState((unsigned short)'D')& 0x8000){ // move right
             fPlayerX += cosf(fPlayerA) * fSpeed  * fElapsedTime;
             fPlayerY -= sinf(fPlayerA) * fSpeed  * fElapsedTime; 
         if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
@@ -97,7 +97,7 @@ while(1){
 
 
     }
-    if(GetAsyncKeyState((unsigned short)'A')& 0x8000){ // move backwards
+    if(GetAsyncKeyState((unsigned short)'A')& 0x8000){ // move left
             fPlayerX -= cosf(fPlayerA) * fSpeed  * fElapsedTime;
             fPlayerY += sinf(fPlayerA) * fSpeed  * fElapsedTime; 
         if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
