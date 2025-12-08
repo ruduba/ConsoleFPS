@@ -58,22 +58,50 @@ while(1){
 
     //controls
     //handle CCW Rotation
-    if(GetAsyncKeyState((unsigned short)'A')& 0x8000)
+    if(GetAsyncKeyState((unsigned short)'Q')& 0x8000)
         fPlayerA -= (0.8f) * fElapsedTime;
 
-    if(GetAsyncKeyState((unsigned short)'D')& 0x8000)
+    if(GetAsyncKeyState((unsigned short)'E')& 0x8000)
         fPlayerA += (0.8f)* fElapsedTime;
 
     if(GetAsyncKeyState((unsigned short)'W')& 0x8000){
         fPlayerX += sinf(fPlayerA) *5.0f * fElapsedTime;
         fPlayerY += cosf(fPlayerA) *5.0f * fElapsedTime;
+
+        if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
+            fPlayerX -= sinf(fPlayerA) *5.0f * fElapsedTime;
+            fPlayerY -= cosf(fPlayerA) *5.0f * fElapsedTime;
+        }
+
+
     }
     if(GetAsyncKeyState((unsigned short)'S')& 0x8000){
         fPlayerX -= sinf(fPlayerA) *5.0f * fElapsedTime;
         fPlayerY -= cosf(fPlayerA) *5.0f * fElapsedTime;
+        if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
+            fPlayerX += sinf(fPlayerA) *5.0f * fElapsedTime;
+            fPlayerY += cosf(fPlayerA) *5.0f * fElapsedTime;
+
+        }
     }
 
+    if(GetAsyncKeyState((unsigned short) 'D') & 0x8000){
+        fPlayerX -= sinf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+        fPlayerY -= cosf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+        if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
+        fPlayerX += sinf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+        fPlayerY += cosf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+        }
+    }
 
+    if(GetAsyncKeyState((unsigned short) 'A') & 0x8000){
+        fPlayerX += sinf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+        fPlayerY += cosf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+        if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
+            fPlayerX -= sinf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+            fPlayerY -= cosf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+        }
+    }
 
 
     for(int x=0; x<nScreenWidth; x++){
