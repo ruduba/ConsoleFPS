@@ -5,19 +5,22 @@ using namespace std;
 #define _UNICODE
 
 #include <cmath>
+#include <vector>
+#include <algorithm>
 
 int nScreenWidth = 120;
 int nScreenHeight = 40;
 
-float fPlayerX = 8.0f; // x coord
-float fPlayerY = 8.0f; // y coord
+float fPlayerX = 14.7f; // x coord
+float fPlayerY = 5.09f; // y coord
 float fPlayerA = 0.0f; // angle
 
+float fPi = 3.14159f;
 int nMapHeight = 16;
 int nMapWidth = 16;
-float fFOV = 3.1415/4;
+float fFOV = fPi/4.0f;
 float fDepth = 16.0f;
-
+float fSpeed = 5.0f;
 int main()
 {
 // Create Screen buffer
@@ -29,17 +32,17 @@ DWORD dwBytesWritten = 0;
 wstring map;
 map += L"################"; // top wall
 map += L"#..............#"; // open space with side walls
+map += L"######.........#";
+map += L"#........#######";
 map += L"#..............#";
 map += L"#..............#";
 map += L"#..............#";
-map += L"#####.....#....#";
-map += L"#..............#";
-map += L"#..............#";
-map += L"#.......#......#";
-map += L"#.......#......#";
-map += L"#.......#......#";
-map += L"#.......#......#";
-map += L"#......#####...#";
+map += L"#..#########...#";
+map += L"#..#...........#";
+map += L"#..#......######";
+map += L"#..#...........#";
+map += L"#..#...........#";
+map += L"#..#...........#";
 map += L"#..............#";
 map += L"#..............#";
 map += L"################"; // bottom wall
@@ -58,50 +61,52 @@ while(1){
 
     //controls
     //handle CCW Rotation
-    if(GetAsyncKeyState((unsigned short)'Q')& 0x8000)
+    if(GetAsyncKeyState((unsigned short)'Q')& 0x8000)   // rotate counterclockwise
         fPlayerA -= (0.8f) * fElapsedTime;
 
-    if(GetAsyncKeyState((unsigned short)'E')& 0x8000)
+    if(GetAsyncKeyState((unsigned short)'E')& 0x8000) //rotate clockwise
         fPlayerA += (0.8f)* fElapsedTime;
 
-    if(GetAsyncKeyState((unsigned short)'W')& 0x8000){
-        fPlayerX += sinf(fPlayerA) *5.0f * fElapsedTime;
-        fPlayerY += cosf(fPlayerA) *5.0f * fElapsedTime;
-
+    if(GetAsyncKeyState((unsigned short)'W')& 0x8000){ // move forward
+        fPlayerX += sinf(fPlayerA) * fSpeed  * fElapsedTime;
+        fPlayerY += cosf(fPlayerA) * fSpeed  * fElapsedTime;
         if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
-            fPlayerX -= sinf(fPlayerA) *5.0f * fElapsedTime;
-            fPlayerY -= cosf(fPlayerA) *5.0f * fElapsedTime;
+            fPlayerX -= sinf(fPlayerA) * fSpeed  * fElapsedTime;
+            fPlayerY -= cosf(fPlayerA) * fSpeed  * fElapsedTime;
         }
 
 
     }
-    if(GetAsyncKeyState((unsigned short)'S')& 0x8000){
-        fPlayerX -= sinf(fPlayerA) *5.0f * fElapsedTime;
-        fPlayerY -= cosf(fPlayerA) *5.0f * fElapsedTime;
+    if(GetAsyncKeyState((unsigned short)'S')& 0x8000){ // move backwards
+        fPlayerX -= sinf(fPlayerA) *fSpeed * fElapsedTime;
+        fPlayerY -= cosf(fPlayerA) *fSpeed* fElapsedTime;
         if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
-            fPlayerX += sinf(fPlayerA) *5.0f * fElapsedTime;
-            fPlayerY += cosf(fPlayerA) *5.0f * fElapsedTime;
+            fPlayerX += sinf(fPlayerA) *fSpeed * fElapsedTime;
+            fPlayerY += cosf(fPlayerA) *fSpeed * fElapsedTime;
 
         }
     }
 
-    if(GetAsyncKeyState((unsigned short) 'D') & 0x8000){
-        fPlayerX -= sinf(fPlayerA-90.0f) *5.0f * fElapsedTime;
-        fPlayerY -= cosf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+        if(GetAsyncKeyState((unsigned short)'D')& 0x8000){ // move forward
+            fPlayerX += cosf(fPlayerA) * fSpeed  * fElapsedTime;
+            fPlayerY -= sinf(fPlayerA) * fSpeed  * fElapsedTime; 
         if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
-        fPlayerX += sinf(fPlayerA-90.0f) *5.0f * fElapsedTime;
-        fPlayerY += cosf(fPlayerA-90.0f) *5.0f * fElapsedTime;
+            fPlayerX -= cosf(fPlayerA) * fSpeed  * fElapsedTime;
+            fPlayerY += sinf(fPlayerA) * fSpeed  * fElapsedTime; 
+        }
+
+
+    }
+    if(GetAsyncKeyState((unsigned short)'A')& 0x8000){ // move backwards
+            fPlayerX -= cosf(fPlayerA) * fSpeed  * fElapsedTime;
+            fPlayerY += sinf(fPlayerA) * fSpeed  * fElapsedTime; 
+        if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
+            fPlayerX += cosf(fPlayerA) * fSpeed  * fElapsedTime;
+            fPlayerY -= sinf(fPlayerA) * fSpeed  * fElapsedTime; 
+
         }
     }
 
-    if(GetAsyncKeyState((unsigned short) 'A') & 0x8000){
-        fPlayerX += sinf(fPlayerA-90.0f) *5.0f * fElapsedTime;
-        fPlayerY += cosf(fPlayerA-90.0f) *5.0f * fElapsedTime;
-        if(map[(int)fPlayerY*nMapWidth + (int)fPlayerX] == '#'){
-            fPlayerX -= sinf(fPlayerA-90.0f) *5.0f * fElapsedTime;
-            fPlayerY -= cosf(fPlayerA-90.0f) *5.0f * fElapsedTime;
-        }
-    }
 
 
     for(int x=0; x<nScreenWidth; x++){
@@ -111,6 +116,7 @@ while(1){
 
         float fDistanceToWall = 0.0f;
         bool bHitWall = false;
+        bool bBoundary = false;
 
         float fEyeX = sinf(fRayAngle);
         float fEyeY = cosf(fRayAngle);
@@ -129,7 +135,27 @@ while(1){
                 //ray is inbounds so test if the ray cell is a wall block
                 if(map[nTestY * nMapWidth + nTestX] == '#'){
                     bHitWall = true;
-                }
+
+                    vector<pair<float, float>> p; // distance, dot
+
+                    for(int tx =0; tx<2; tx++)
+                        for(int ty =0; ty<2; ty++){
+                            float vy = (float)nTestY + ty - fPlayerY;
+                            float vx = (float)nTestX + tx - fPlayerX;
+                            float d = sqrt(vx*vx + vy*vy);
+                            float dot = (fEyeX * vx /d) + (fEyeY * vy /d);
+                            p.push_back(make_pair(d, dot));
+                        }
+
+                        //sort pairs from closest to farthest
+                        sort(p.begin(), p.end(), [](const pair<float, float> &left, const pair<float, float> &right){ return left.first < right.first;});
+                        
+                        float fBound = 0.01;
+                        if(acos(p.at(0).second)< fBound) bBoundary = true;
+                        if(acos(p.at(1).second)< fBound) bBoundary = true;
+                        //if(acos(p.at(2).second)< fBound) bBoundary = true;
+                
+                    }
             }
 
         }
@@ -148,10 +174,10 @@ while(1){
         else if(fDistanceToWall < fDepth) nShade = 0x2591;
         else nShade = ' ';
         //*/
+        if(bBoundary) nShade = ' ';
 
 
-
-        for(int y = 0; y< nScreenHeight; y++)
+        for(int y = 0; y< nScreenHeight; y++){
             if(y <= nCeiling)
                 screen[y*nScreenWidth + x] = ' ';
             else if(y > nCeiling && y <= nFloor)
@@ -165,10 +191,22 @@ while(1){
                 else nShade = ' ';
                 screen[y*nScreenWidth + x] = nShade;
             }
+        }
     }
+
+
+//display stats
+swprintf_s(screen, 40, L"X=%3.2f, Y=%3.2f, A=%3.2f FPS=%3.2f", fPlayerX, fPlayerY, fPlayerA, 1.0f/fElapsedTime);
+//display map
+for(int nx = 0; nx <nMapWidth; nx++)
+    for(int ny = 0; ny<nMapWidth; ny++){
+        screen[(ny+1)*nScreenWidth + nx] = map[ny*nMapWidth + nx];
+    }
+screen[((int)fPlayerY+1)*nScreenWidth+(int)fPlayerX] = 'V';
 screen[nScreenWidth * nScreenHeight - 1] = '\0';
 WriteConsoleOutputCharacterW(hConsole, screen, nScreenWidth * nScreenHeight, { 0,0 }, &dwBytesWritten);
-
 }
+
+
 return 0;
 }
