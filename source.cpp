@@ -59,10 +59,19 @@ while(1){
     //controls
     //handle CCW Rotation
     if(GetAsyncKeyState((unsigned short)'A')& 0x8000)
-        fPlayerA -= (0.1f) * fElapsedTime;
+        fPlayerA -= (0.8f) * fElapsedTime;
 
     if(GetAsyncKeyState((unsigned short)'D')& 0x8000)
-        fPlayerA += (0.1f)* fElapsedTime;
+        fPlayerA += (0.8f)* fElapsedTime;
+
+    if(GetAsyncKeyState((unsigned short)'W')& 0x8000){
+        fPlayerX += sinf(fPlayerA) *5.0f * fElapsedTime;
+        fPlayerY += cosf(fPlayerA) *5.0f * fElapsedTime;
+    }
+    if(GetAsyncKeyState((unsigned short)'S')& 0x8000){
+        fPlayerX -= sinf(fPlayerA) *5.0f * fElapsedTime;
+        fPlayerY -= cosf(fPlayerA) *5.0f * fElapsedTime;
+    }
 
 
 
